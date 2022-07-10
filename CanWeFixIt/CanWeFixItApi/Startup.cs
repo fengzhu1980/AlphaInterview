@@ -1,5 +1,9 @@
+using CanWeFixItRepository;
+using CanWeFixItRepository.Models;
+using CanWeFixItService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -20,11 +24,15 @@ namespace CanWeFixItApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddSingleton<IRepository<InstrumentDM>, InstrumentRepository>();
+            services.AddSingleton<IRepository<MarketDataDM>, MarketDataRepository>();
+            services.AddTransient<InstrumentService>();
+            services.AddTransient<MarketDataService>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CanWeFixItApi", Version = "v1" });
             });
-            services.AddSingleton<IDatabaseService, DatabaseService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,9 +46,10 @@ namespace CanWeFixItApi
             }
 
             // Populate in-memory database with data
-            var database = app.ApplicationServices.GetService(typeof(IDatabaseService)) as IDatabaseService;
-            database?.SetupDatabase();
+            //var database = app.ApplicationServices.GetService(typeof(IDatabaseService)) as IDatabaseService;
+            //database?.SetupDatabase();
             
+
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();

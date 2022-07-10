@@ -1,10 +1,10 @@
-﻿namespace CanWeFixItService
+﻿namespace CanWeFixItRepository.Models
 {
-    public class Instrument
+    public class MarketDataDM
     {
         public int Id { get; set; }
+        public long? DataValue { get; set; }
         public string Sedol { get; set; }
-        public string Name { get; set; }
         public bool Active { get; set; }
     }
 }
